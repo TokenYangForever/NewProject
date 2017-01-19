@@ -1,4 +1,17 @@
-//1.defer使JavaScript异步加载(同css)
+·Defer、Async属性
+
+·提高页面加载速度的最简单快速的方法就是将脚本文件放到body底部。
+
+·defer是html4.0中定义的，该属性使得浏览器能延迟脚本的执行，等文档完成解析完成后会按照他们在文档出现顺序再去下载解析。
+也就是说defer属性的<script>就类似于将<script>放在body的效果。
+
+·async是HTML5新增的属性，IE10和浏览器都是支持该属性的。
+该属性的作用是让脚本能异步加载，也就是说当浏览器遇到async属性的<script>时浏览器加载css一样是异步加载的。
+
+·async 脚本在script文件下载完成后会立即执行,并且其执行时间一定在 window的load事件触发之前。
+这意味着多个async脚本很可能不会按其在页面中的出现次序顺序执行。
+·与此相对，浏览器确保多个 defer 脚本按其在HTML页面中的出现顺序依次执行,且执行时机为DOM解析完成后，document的DOMContentLoaded 事件触发之前。
+
 <script type="text/javascript" defer>
     alert('defer')
 </script>
@@ -10,3 +23,5 @@
         alert('onload')
     }
 </script>
+
+·支持defer的情况下：alert：script=>defer=>onload
