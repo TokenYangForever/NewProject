@@ -168,3 +168,20 @@ var browser = {
     }(),
     language: (navigator.browserLanguage || navigator.language).toLowerCase()
 }
+(function (S) {
+    S.prototype.tTrim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    };
+    S.prototype.tstartWith = function (s) {  
+        return this.indexOf(s) == 0  
+    }  
+    S.prototype.tEndWiths = function (str) {
+        return this.lastIndexOf(str) == this.length - str.length&&(this.length - str.length)>0;
+    };
+    S.prototype.tGetByteLength = function () {
+        return this.replace(/[\u4e00-\u9fa5]+/g,"**").length;
+    };
+    S.prototype.treplaceAll = function (s1, s2) {  
+        return this.replace(new RegExp(s1, "g"), s2)  
+    }  
+})(String);
