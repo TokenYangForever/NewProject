@@ -101,7 +101,7 @@ var StorageHelp = {
     },
     ClearSessionStorage:function(arr){
         if(!(arr instanceof Array)){
-            arr=["OrderPage_12306PassengerList","OrderPage_PassengerList","OrderPage_HotelGiftVoucher","OrderPage_InsuranceIndex","OrderPage_SeatType","OrderPage_ProcessTimeIndex","OrderPage_VoucherIndex","OrderPage_AcceptSeat","searchKey"];
+            arr = ["defaultArrToClear"];
         }
         if (window.sessionStorage) {
             try{
@@ -112,7 +112,6 @@ var StorageHelp = {
                 for(var i=0;i<arr.length;i++){
                     $.cookie(arr[i], '', {expires:-1});
                 }
-
             }
         }else{
             for(var i=0;i<arr.length;i++){
@@ -121,3 +120,51 @@ var StorageHelp = {
         }
     }
 };
+function stopScroll() {
+    $("body").on("touchmove", function (a) {
+        a.preventDefault();
+    });
+    $("html").css({'overflow':'hidden'});
+}
+function startScroll() {
+    $("body").off("touchmove");
+    $("html").css({'overflow':'auto'});
+}
+/**
+ * 获得url中的queryString OBJ
+ */
+function getRequest() {
+    var searchString = window.location.search.substring(1),
+        params = searchString.split("&"),
+        hash = {};
+    if (searchString == "") return {};
+    for (var i = 0; i < params.length; i++) {
+        var pos = params[i].indexOf('=');
+        if (pos == -1) { continue; }
+        var paraName = params[i].substring(0, pos),
+            paraValue = params[i].substring(pos + 1);
+        hash[paraName] = paraValue;
+    }
+    return hash;
+}
+/**
+ * 获取移动终端浏览器版本信息
+ */
+var browser = {
+    versions: function () {
+        var u = navigator.userAgent, app = navigator.appVersion;
+        return {
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/) || !!u.match(/AppleWebKit/), //是否为移动终端
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+            iPad: u.indexOf('iPad') > -1, //是否iPad
+            webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+        };
+    }(),
+    language: (navigator.browserLanguage || navigator.language).toLowerCase()
+}
