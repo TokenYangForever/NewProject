@@ -185,28 +185,4 @@ var browser = {
         return this.replace(new RegExp(s1, "g"), s2)  
     }  
 })(String);
-function deduplication(arr,index){ 
-    var temarr = arr.slice(0);
-    if(typeof(index)=="number"){
-        if(index>=0){
-            var index = 1;
-            var i = 0; 
-        }else{
-            var index = -1;
-            var i = temarr.length-1;
-        }
-    }else{
-        var index = 1;
-        var i = 0; 
-    }
-    if(typeof arr[0] == "object"){
-    }else{
-        for(;i>=0||i<temarr.length;i+index){
-            for(var j = i+index;i>=0||i<temarr.length;j+index){
-                if(temarr[i]==temarr[j]) temarr.splice(j,1);
-                else j+index
-            }
-        }
-    }
-    return temarr;
-}
+
