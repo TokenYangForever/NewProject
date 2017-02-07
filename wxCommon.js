@@ -154,7 +154,7 @@ var envi = {
         isIOS: false,
         isIPhone: false,
         isIPad: false,
-        //isPC: false,
+        isPC: false,
         isInWeixin: false,
         isInQQ: false,
         deviceType: null,
@@ -171,7 +171,7 @@ var envi = {
             if (/Android /.test(av)) this.isAndroid = true;
             else if (/iPhone;/.test(av)) this.isIPhone = true;
             else if (/iPad;/.test(av)) this.isIPad = true;
-            //else this.isPC = true;
+            else this.isPC = true;
             if (/MicroMessenger/.test(av)) this.isInWeixin = true;
             else if (/MQQBrowser/.test(av)) this.isInQQ = true;
             this.deviceType = this.isAndroid ? "Android" : (this.isIPhone ? "iPhone" : (this.isIPad ? "iPad" : "Other"));
@@ -187,7 +187,7 @@ envi.init();
  */
 var browser = {
     versions: function () {
-        var u = navigator.userAgent, app = navigator.appVersion;
+        var u = navigator.userAgent;
         return {
             trident: u.indexOf('Trident') > -1, //IE内核
             presto: u.indexOf('Presto') > -1, //opera内核
