@@ -44,3 +44,34 @@ getJSON("/posts.json").then(function(json) {
 }, function(error) {
   console.error('出错了', error);
 });
+
+
+//使用catch方法捕获错误
+// 写法一
+var promise = new Promise(function(resolve, reject) {
+  try {
+    throw new Error('test');
+  } catch(e) {
+    reject(e);
+  }
+});
+promise.catch(function(error) {
+  console.log(error);
+});
+
+// 写法二
+var promise = new Promise(function(resolve, reject) {
+  reject(new Error('test'));
+});
+promise.catch(function(error) {
+  console.log(error);
+});
+
+//Promise对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。
+getJSON("/post/1.json").then(function(post) {
+  return getJSON(post.commentURL);
+}).then(function(comments) {
+  // some code
+}).catch(function(error) {
+  // 处理前面三个Promise产生的错误
+});
