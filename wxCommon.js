@@ -147,6 +147,41 @@ function getRequest() {
     }
     return hash;
 }
+//获取客户端类型
+var envi = {
+        hasTouch: 'ontouchstart' in window,
+        isAndroid: false,
+        isIOS: false,
+        isIPhone: false,
+        isIPad: false,
+        //isPC: false,
+        isInWeixin: false,
+        isInQQ: false,
+        deviceType: null,
+        deviceModel: null,
+        osVersion: null,
+        //获取网络类型
+        getNetType: function () {
+            if (navigator.connection) return navigator.connection.type;
+            return 0;
+        },
+        //获取客户端类型 ios android等
+        init: function () {
+            var av = window.navigator.appVersion;
+            if (/Android /.test(av)) this.isAndroid = true;
+            else if (/iPhone;/.test(av)) this.isIPhone = true;
+            else if (/iPad;/.test(av)) this.isIPad = true;
+            //else this.isPC = true;
+            if (/MicroMessenger/.test(av)) this.isInWeixin = true;
+            else if (/MQQBrowser/.test(av)) this.isInQQ = true;
+            this.deviceType = this.isAndroid ? "Android" : (this.isIPhone ? "iPhone" : (this.isIPad ? "iPad" : "Other"));
+            if (this.isAndroid) this.osVersion = /Android (\d+[^;]+)?;/.exec(av)[1], this.deviceModel = /; ([^;\)]+)\)/.exec(av)[1];
+            else if (this.isIPhone || this.isIPad) this.osVersion = / OS (\d+[^ ]+)? /.exec(av)[1].replace(/_/g, '.');
+
+            this.isIOS = /Mac OS X/.test(av);
+        },
+    }
+envi.init();
 /**
  * 获取移动终端浏览器版本信息
  */
@@ -198,4 +233,16 @@ function getDiff(date1, date2) {
          minute: mm1,
          second: ss1
       };
+}
+function setTitle(title) {
+            document.title = title;
+            if (envi.isIOS) {
+                //兼容ios微信中无法修改document.title的情况
+                var ifr = $('<iframe src="/favicon.ico"></iframe>');
+                ifr.on('load', function () {
+                    setTimeout(function () {
+                        ifr.off('load').remove();
+                    }, 0);
+                }).appendTo($('body'));
+            }
 }
