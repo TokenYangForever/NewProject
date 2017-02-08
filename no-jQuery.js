@@ -38,3 +38,31 @@ win.getComputedStyle(el, null).color;
 // 设置样式.style可读可写 .getComputedStyle只可读；
 el.style.color = '#ff0011';
 
+//添加类名
+el.classList.add(className);
+//删除类名
+el.classList.remove(className);
+//是否含类名
+el.classList.contains(className);
+//切换类名
+el.classList.toggle(className);
+
+//移除元素
+el.parentNode.removeChild(el);
+//.text()
+el.textContent;
+//获取html
+el.innerHTML;
+//添加事件
+el.addEventListener(eventName, eventHandler);
+//移除事件
+el.removeEventListener(eventName, eventHandler);
+//trigger()
+if (window.CustomEvent) {
+  const event = new CustomEvent('custom-event', {detail: {key1: 'data'}});
+} else {
+  const event = document.createEvent('CustomEvent');
+  event.initCustomEvent('custom-event', true, true, {key1: 'data'});
+}
+
+el.dispatchEvent(event);
