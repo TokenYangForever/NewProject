@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>移动端单页滑动</title>
     </head>
 
     <body>
@@ -96,7 +96,10 @@
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script>
     <script type="text/javascript">
     $(function(){
-    //移动端手势滑动
+        $('body').on('touchmove', function (e) {
+            e.preventDefault();
+        });
+        $("html").css({'overflow':'hidden'});
         var startY,pageY;
         $(".wrap").on('touchstart', function(e){
         var $this = $(e.target);
@@ -106,15 +109,9 @@
         startY = e.originalEvent.targetTouches[0].pageY;
         }).on('touchmove', function(e){
             var $this = $(e.target);
-            if(!$this.hasClass('el')){
-                e.preventDefault();
-            }
             pageY = e.originalEvent.targetTouches[0].pageY;
         }).on('touchend', function(e){
             var $this = $(e.target);
-            if(!$this.hasClass('el')){
-                e.preventDefault();
-            }
             if (pageY < startY) {
                 if ((startY - pageY) > 50 ) {
                     //手势向下滑动
