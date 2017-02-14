@@ -157,3 +157,6 @@ a {
     -webkit-transform: scaleY(.5);
     -webkit-transform-origin: left top;
 }
+@media screen and (max-width: 320px) {
+  //媒体查询，兼容小屏机样式
+}
