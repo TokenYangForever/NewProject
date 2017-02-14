@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>移动端单页滑动</title>
+        <title></title>
     </head>
 
     <body>
@@ -101,30 +101,21 @@
         });
         $("html").css({'overflow':'hidden'});
         var startY,pageY;
+
         $(".wrap").on('touchstart', function(e){
-        var $this = $(e.target);
-        if(!$this.hasClass('el')){
-            e.preventDefault();
-        }
-        startY = e.originalEvent.targetTouches[0].pageY;
+            startY = e.originalEvent.targetTouches[0].pageY;
         }).on('touchmove', function(e){
-            var $this = $(e.target);
             pageY = e.originalEvent.targetTouches[0].pageY;
         }).on('touchend', function(e){
-            var $this = $(e.target);
-            if (pageY < startY) {
-                if ((startY - pageY) > 50 ) {
+            if ((startY - pageY) > 50 ) {
                     //手势向下滑动
                     $(".page1").removeClass("page_moveToTop").addClass("page_moveFromTop");
                     $(".page2").removeClass("page_moveFromBottom").addClass("page_moveToBottom");
-                }
             }
-            if (pageY > startY) {
-                if ((pageY - startY) > 50 ) {
+            if ((pageY - startY) > 50 ) {
                     //手势向上滑动
                     $(".page1").removeClass("page_moveFromTop").addClass("page_moveToTop");
                     $(".page2").removeClass("page_moveToBottom").addClass("page_moveFromBottom");
-                }
             }
         });
     });
