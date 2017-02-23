@@ -1,0 +1,51 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Flex</title>
+    <style type="text/css">
+    .flex1{
+        flex:1;
+    }
+    .flexBox{
+        background-color: #666;
+        display: -webkit-flex; 
+        display: flex;
+        width: 150px;
+        height: 150px;
+        margin-bottom: 20px;
+    }
+    .blackBlock{
+        background-color: black;
+        height:50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+    .box1{
+      flex-direction: column;
+      align-items: center;
+    }
+    .box2 .flex1:nth-child(2){
+        align-self: center;
+    }
+    .box2 .flex1:nth-child(3){
+        align-self: flex-end;
+    }
+    </style>
+</head>
+
+<body>
+   <div class="flexBox">
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+   </div>
+   <div class="flexBox box1">
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+   </div>
+   <div class="flexBox box2">
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+       <div class="flex1 blackBlock"></div>
+   </div>
+</body>
