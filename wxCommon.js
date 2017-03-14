@@ -266,3 +266,13 @@ function setTitle(title) {
       }
 
     }());
+function canvasToImg(cId){
+    var canvas = document.getElementsById(cId),
+        imgData = canvas.toDataURL('image/png'),
+        imgs= new Image();
+        imgs.src=imgData;
+    return imgs
+}
+
+
+
