@@ -410,3 +410,21 @@ function openCalendar(opts) {
         }
     });
 }
+
+openCalendar({
+                    count: 4,
+                    days: 69,
+                    select: $("#Time").val(),
+                    onChange: function(value) {
+                        value = zj.date.parse(value).format("yyyy-MM-dd");
+                        $("#Time").val(value);
+                        StorageHelp.SetStorage("bDate", value);
+                        var dates = zj.date.parse(value);
+                        $("#tselect_Date").html("<span class=\"orange\">" + (dates.getMonth() + 1) + "月" + (dates.getDate()) + "日</span>");
+                        //日期选择未变车次坐席不变
+                        if(preTime!=StorageHelp.GetStorage("bDate")){
+                            //日期选择和车站选择dom样式改变
+                            domDisplay();
+                        } 
+                    }
+                });
