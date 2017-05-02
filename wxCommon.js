@@ -299,4 +299,114 @@ Date.getWeek = function(a) {
     this.aWeek = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
     return this.aWeek[a]
 }
+function openCalendar(opts) {
+    var dateForTips=(typeof SERVERTIME !== "undefined") ? new Date(SERVERTIME) : new Date();    
 
+    var _tempDate = new Date(dateForTips.getFullYear(), dateForTips.getMonth(),dateForTips.getDate() + 59);
+
+    var _tempfutureDate=new Date(_tempDate.getTime()+6 * 24 * 3600 * 1000);
+    var monthEnd=(_tempDate.getMonth() + 1);
+    var dayEnd=_tempDate.getDate();
+    var futureMothEnd=(_tempfutureDate.getMonth() + 1);
+    var futureDayEnd=_tempfutureDate.getDate();
+    var isChangeOrder=getRequest().isChangeOrder==1?true:false;
+    var type="";
+    var tipsText="";
+    type=isChangeOrder?"":"抢";
+    //判断12月30日前后
+    var judgeDate = new Date("2016/12/30").getTime();
+    var nowDate = new Date().getTime();
+    if(nowDate>=judgeDate){
+        monthEnd = new Date(nowDate+29*24*60*60*1000).getMonth()+1;
+        dayEnd = new Date(nowDate+29*24*60*60*1000).getDate();
+        futureMothEnd = new Date(nowDate+75*24*60*60*1000).getMonth()+1;
+        futureDayEnd = new Date(nowDate+75*24*60*60*1000).getDate();
+    }else{
+        monthEnd = new Date(nowDate+59*24*60*60*1000).getMonth()+1;
+        dayEnd = new Date(nowDate+59*24*60*60*1000).getDate();
+        futureMothEnd = new Date(nowDate+75*24*60*60*1000).getMonth()+1;
+        futureDayEnd = new Date(nowDate+75*24*60*60*1000).getDate();
+    }
+    tipsText=isChangeOrder?"":"<br />可提前预约"+futureMothEnd+"月"+futureDayEnd+"日前的火车票，开售自动为您抢票</p>";
+    var calendar=new Calendar({
+        tips:{
+            //text:"<p class='buyDate'>今天是{$month}月{$day}号，可购买"+monthEnd+"月"+dayEnd+"日的火车票"+tipsText
+            text:"<p class = 'buyDate'>因铁路局列车运行图调整，火车票预售期调整为30天，建议您提前预约抢票，开售自动抢票。</p>"
+        },
+        type: type,
+        count: opts.count || 4,
+        days: opts.days || 59,
+        dely: 250,
+        date: opts.todayDate || ((typeof SERVERTIME !== "undefined") ? new Date(SERVERTIME) : new Date()),
+        select: opts.select,
+        range: opts.range || [],
+        onCreate: function (dom) {
+            new List({
+                floatContainer: document.querySelector(".float-header"),
+                Scroll: (function () {
+                    var listeners = [];
+                    var top;
+                    var scroll = new iScroll("calendars", {
+                        onScrollMove: function (e) {
+                            top = -this.y;
+                            listeners.forEach(function (fn) {
+                                fn.call(window);
+                            });
+                        },
+                        onScrollEnd: function () {
+                            if (document.querySelector(".float-header")) {
+                                document.querySelector(".float-header").style.opacity = 1;
+                            }
+                        }
+                    });
+                    return {
+                        onscroll: function (fn) {
+                            listeners.push(fn);
+                        },
+                        getScrollTop: function () {
+                            return top;
+                        },
+                        getOffsetTop: function (target) {
+                            return target.offsetTop;
+                        }
+                    }
+                })(),
+                targets: document.querySelectorAll(".calendars-wrapper h3")
+            });
+            function setHoliday(dataStr){
+                if ($($(dom).find("a")[i]).attr('data-day') == dataStr) {
+                    $($(dom).find("a")[i]).find("div:first-child").html('<div class="tag_rest"><span class="tag_content">假</span></div>'+zj.date.parse(dataStr).getDate());
+                }
+            }
+            // 对部分法定假日提前放假的情况 调整
+            for (var i = 0; i < $(dom).find("a").length; i++) {
+                setHoliday("2016-4-30");
+                setHoliday("2016-4-2");
+                setHoliday("2016-4-3");
+            }
+            if (opts.onCreate) opts.onCreate();
+        },
+        canChange: function (date, el) {
+            if ($(el).find('div').hasClass('disabled') || $(el).attr('data-day') == (null || "")) {
+                /* 给可售期后的添加事件 */
+                var p = $(el).attr('data-day');
+                var policydate = new Date(zj.date.parse(p).setDate(zj.date.parse(p).getDate() - 59));
+                var todayDate = (typeof SERVERTIME !== "undefined") ? new Date(SERVERTIME) : new Date();
+                var appointDate=new Date((new Date(date.replace(/-/g, "/"))).getTime()-64*24*3600*1000);
+                if (policydate.getTime() > todayDate.getTime()) {
+                    var subMsg="您可在"+appointDate.format('yyyy年MM月dd日')+"提前预约抢票。";
+                    if(isChangeOrder){
+                        subMsg="";
+                    }
+                    mobileUtil.dialog("预售期为60天，您所选日期将在" + policydate.format('yyyy年MM月dd日') + "开售。"+subMsg, "body");
+                }
+                return false;
+            }
+            $(el).parent().parent().parent().find('a').find('div').removeClass('nian_select');
+            return true;
+        },
+        onChange: function (value) {
+            if (opts.onChange) opts.onChange(value);
+        }
+    });
+}
