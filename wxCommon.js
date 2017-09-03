@@ -411,20 +411,56 @@ function openCalendar(opts) {
     });
 }
 
-openCalendar({
-                    count: 4,
-                    days: 69,
-                    select: $("#Time").val(),
-                    onChange: function(value) {
-                        value = zj.date.parse(value).format("yyyy-MM-dd");
-                        $("#Time").val(value);
-                        StorageHelp.SetStorage("bDate", value);
-                        var dates = zj.date.parse(value);
-                        $("#tselect_Date").html("<span class=\"orange\">" + (dates.getMonth() + 1) + "月" + (dates.getDate()) + "日</span>");
-                        //日期选择未变车次坐席不变
-                        if(preTime!=StorageHelp.GetStorage("bDate")){
-                            //日期选择和车站选择dom样式改变
-                            domDisplay();
-                        } 
-                    }
-                });
+
+  /**
+   * 生成一个唯一的guid
+   * @return {string}
+   * @example
+   * // 7f603b20-17ff-4f47-aeb9-e7996de04939
+   * util.guid();
+   * @see http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+   */
+  function guid () {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
+  }
+let jsLimit
+
+  function loadScript (url, success, error) {
+    if (Lizard.isHybrid) {
+      return
+    }
+
+    if (!jsLimit) {
+      jsLimit = new Set()
+    }
+
+    if (jsLimit.has(url)) {
+      return;
+    }
+
+    jsLimit.add(url);
+
+    var node = document.createElement('script');
+    node.addEventListener('load', success, false);
+    node.addEventListener('error', function() {
+      node.parentNode.removeChild(node);
+      jsLimit.delete(url);
+      if (error) {
+        error();
+      }
+    }, false);
+
+    if (url.includes('lechebang')) {
+      node.crossOrigin = 'anonymous';
+    }
+    
+    
+    node.src = url;
+
+    document.querySelector('head').appendChild(node);
+
+    return node;
+  }
