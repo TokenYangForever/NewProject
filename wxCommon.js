@@ -464,3 +464,107 @@ let jsLimit
 
     return node;
   }
+  function pick (obj, keys) {
+    let result = {}
+
+    if (!obj) {
+      return result
+    }
+
+    keys.forEach((item) => {
+      if (obj.hasOwnProperty(item)) {
+        result[item] = obj[item]
+      }
+    })
+
+    return result
+  }
+  function getCurrentYear () {
+    var now = new Date(Date.now());
+
+    return now.getFullYear();
+  }
+
+  function isLeapYear (year) {
+    if (year % 100 === 0) {
+      if (year % 400 === 0) {
+        return true;
+      }
+    } else if (year % 4 === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  function getDaysInMonth (year, month) {
+    return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+  }
+  /**
+   * 深度clone
+   * @example
+   * util.noopPromise()
+   */
+  function cloneDeep (obj) {
+    if (!_.isObject(obj)) return obj;
+
+    let result
+
+    if (Array.isArray(obj)) {
+      result = []
+
+      obj.forEach((item) => {
+        result.push(cloneDeep(item))
+      })
+      return result
+    }
+
+    result = {}
+
+    for (let key in obj) {
+      let item = obj[key]
+      
+      if (_.isObject(item)) {
+        result[key] = cloneDeep(item)
+      } else {
+        result[key] = item
+      }
+    }
+
+    return result
+  }
+
+  /**
+   * 获取两个高德坐标的距离, 后一个点，不传，默认为用户坐标
+   * @return {null|number} 距离多少米，没有定位信息，返回null
+   * @example
+   * util.getDistance(31.282055633974, 121.379623888259)
+   * util.getDistance(latGd, lonGd)
+   */
+  function getDistance (endLat, endLon, startLat, startLon) {
+    if (!startLat) {
+      let address = Lizard.state.address
+
+      if (address && address.lat) {
+        startLat = address.lat
+        startLon = address.lon
+      }
+    }
+
+    // 没有定位
+    if (!startLat) {
+      return null
+    }
+
+    const PI = Math.PI
+    let lon1 = (PI / 180) * startLon
+    let lon2 = (PI / 180) * endLon 
+    let lat1 = (PI / 180) * startLat  
+    let lat2 = (PI / 180) * endLat 
+    // 地球半径  
+    let R = 6378.137;  
+
+    // 两点间距离 km，如果想要米的话，结果*1000就可以了  
+    let d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;  
+
+    return parseInt(d * 1000, 10)
+  }
