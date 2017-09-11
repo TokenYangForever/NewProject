@@ -223,10 +223,10 @@ var browser = {
 // 计算两个时间戳之间的时间差返回相差的天数，小时数，分钟数，秒数
 function getDiff(date1, date2) {
      var ms = (date1.getTime() - date2.getTime());
-     var day1 = Math.floor(ms / 24 / 3600 / 1000),
-         hh1 = Math.floor((ms / 3600 / 1000) % 24),
-         mm1 = Math.floor((ms / 1000 / 60) % 60),
-         ss1 = Math.floor((ms / 1000) % 60);
+     var day1 = Math.round(ms / 24 / 3600 / 1000),
+         hh1 = Math.round((ms / 3600 / 1000) % 24),
+         mm1 = Math.round((ms / 1000 / 60) % 60),
+         ss1 = Math.round((ms / 1000) % 60);
      return {
          day: day1,
          hour: hh1,
