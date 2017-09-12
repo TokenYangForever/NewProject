@@ -348,3 +348,106 @@ let jsLimit
 
     return parseInt(d * 1000, 10)
   }
+  /**
+   * 追加url参数
+   * @param {string} url url参数
+   * @param {string|object} key 名字或者对象
+   * @param {string} value 值
+   * @return {string} 返回新的url
+   * @example
+   * util.appendQuery('lechebang.com', 'id', 3);
+   * util.appendQuery('lechebang.com?key=value', { cityId:2,cityName: '北京'});
+   */
+  function appendQuery (url, key, value) {
+    var options = key;
+
+    if (typeof options == 'string') {
+      options = {};
+      options[key] = value;
+    }
+
+    options = $.param(options);
+
+    if (url.includes('?')) {
+      url += '&' + options
+    } else {
+      url += '?' + options
+    }
+
+    return url;
+  }
+  function deleteKey (obj, arr) {
+    arr.forEach(function(item) {
+      delete obj[item];
+    });
+
+    return obj
+  }
+  function loadImg (url) {
+    return new Promise((resolve, reject) => {
+      let img = new Image()
+
+      img.addEventListener('load', function() {
+        resolve([img.width, img.height])
+      }, false)
+
+      img.addEventListener('error', reject, false)
+
+      img.src = url
+    })
+  }
+  const repeat = (str, n) => {
+    let res = ''
+    while (n) {
+      if (n % 2 === 1) res += str
+      if (n > 1) str += str
+      n >>= 1
+    }
+    return res
+  }
+/**
+ * Parse simple path.
+ */
+const bailRE = /[^\w.$]/
+export function parsePath (path: string): any {
+  if (bailRE.test(path)) {
+    return
+  }
+  const segments = path.split('.')
+  return function (obj) {
+    for (let i = 0; i < segments.length; i++) {
+      if (!obj) return
+      obj = obj[segments[i]]
+    }
+    return obj
+  }
+}
+/**
+ * Check if a string starts with $ or _
+ */
+export function isReserved (str: string): boolean {
+  const c = (str + '').charCodeAt(0)
+  return c === 0x24 || c === 0x5F
+}
+/**
+ * Helper that recursively merges two data objects together.
+ */
+function mergeData (to: Object, from: ?Object): Object {
+  if (!from) return to
+  let key, toVal, fromVal
+  const keys = Object.keys(from)
+  for (let i = 0; i < keys.length; i++) {
+    key = keys[i]
+    toVal = to[key]
+    fromVal = from[key]
+    if (!hasOwn(to, key)) {
+      set(to, key, fromVal)
+    } else if (isPlainObject(toVal) && isPlainObject(fromVal)) {
+      mergeData(toVal, fromVal)
+    }
+  }
+  return to
+}
+function isNative (Ctor) {
+  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+}
