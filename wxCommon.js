@@ -425,14 +425,14 @@ export function parsePath (path: string): any {
 /**
  * Check if a string starts with $ or _
  */
-export function isReserved (str: string): boolean {
+export function isReserved (str) {
   const c = (str + '').charCodeAt(0)
   return c === 0x24 || c === 0x5F
 }
 /**
  * Helper that recursively merges two data objects together.
  */
-function mergeData (to: Object, from: ?Object): Object {
+function mergeData (to, from) {
   if (!from) return to
   let key, toVal, fromVal
   const keys = Object.keys(from)
