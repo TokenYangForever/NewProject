@@ -541,3 +541,10 @@ function isReserved (str) {
   var c = (str + '').charCodeAt(0);
   return c === 0x24 || c === 0x5F
 }
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor;
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
