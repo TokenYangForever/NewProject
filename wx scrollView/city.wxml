@@ -1,0 +1,30 @@
+<scroll-view scroll-y scroll-into-view="{{toView}}" scroll-with-animation='true' style="height: {{windowHeight}};" class="page-content">
+  <view class="cii-current-city" wx:if="{{curCity}}" catchtap="currentCityAction">
+     <image class="cii-local" src="../../img/webapp/local.svg"></image> 
+    {{curCity.cityName}}
+    <span class="font-xs cii-current-city-tips">当前定位城市</span>
+  </view> 
+  <view class="cii-location-failure" wx:else catchtap="getAddress">
+    <image class="cii-refresh" src="../../img/webapp/refresh.svg"></image>
+    定位失败,点击重试
+  </view>
+  <view class="font-xs cii-hot-city">热门城市</view>
+  <view class="cii-flex-wrap clearfix">
+    <view class="cii-flex-item show-dots fix-content" wx:for="{{hotCitys}}" wx:key="item.code" data-item="{{item}}" catchtap="chooseAction">{{item.name}}</view>
+  </view>
+  <view wx:for="{{allCity}}" wx:key="index">
+    <view class="cii-gap-words font-xs" id="{{item[0]}}">{{item[0]}}</view>
+    <ul class="cii-wrap line-shadow">
+      <li class="cii-item cat-line-shadow" wx:for="{{item[1]}}" wx:for-item="subItem" wx:key="i.code" data-item="{{subItem}}" catchtap="chooseAction">       {{subItem.name}}
+      </li>
+    </ul>
+  </view>
+  <view class="cii-gap-words2 font-xs gray9">其他城市正在陆续推出，敬请期待！</view>
+</scroll-view >
+<view>
+  <ul class="char-nav vertical-center">
+    <li wx:for="{{sh}}" wx:key="{{item}}" bindtap="scrollAction" data-value="{{item}}">{{item}}</li>
+  </ul>
+</view>
+<!-- 系统模板 -->
+<include src="../../template/system.wxml"/>
