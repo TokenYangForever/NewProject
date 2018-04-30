@@ -1,0 +1,24 @@
+{
+  "name": "nothins",
+  "version": "1.0.0",
+  "description": "***",
+  "main": "Debouncing&Throttling.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TokenYangForever/NewProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TokenYangForever/NewProject/issues"
+  },
+  "homepage": "https://github.com/TokenYangForever/NewProject#readme",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1",
+    "underscore": "^1.9.0"
+  }
+}
